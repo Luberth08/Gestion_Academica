@@ -20,10 +20,10 @@ COPY . .
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Generar la APP_KEY automáticamente
-RUN php artisan key:generate
+# ⚠️ Eliminar php artisan key:generate, ya definiste APP_KEY en Render
+# RUN php artisan key:generate
 
-# Configurar Apache para servir desde /public
+# Configurar permisos
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exponer el puerto 80
