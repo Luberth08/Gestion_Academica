@@ -26,7 +26,7 @@ class CorsServiceProvider extends ServiceProvider
             'http://localhost:5173',  // Vite dev server
             'http://127.0.0.1:5173',  // Vite alternativo
             'http://localhost:3000',  // React dev server
-            'https://tu-dominio-produccion.com', // Producción
+            'https://gestion-academica-eight.vercel.app', // Producción
             'https://tu-otro-frontend.com',     // Segundo frontend
         ];
 
