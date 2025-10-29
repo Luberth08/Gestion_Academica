@@ -1,0 +1,27 @@
+/* src/components/layout/Sidebar/Sidebar.css */
+.sidebar {
+  width: 280px;
+  background: var(--white);
+  border-right: 1px solid var(--gray-200);
+  height: calc(100vh - 70px);
+  position: fixed;
+  top: 70px;
+  left: 0;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-nav {
+  padding: var(--spacing-md) 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 99;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}

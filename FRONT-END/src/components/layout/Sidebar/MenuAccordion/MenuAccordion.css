@@ -1,0 +1,52 @@
+/* src/components/layout/Sidebar/MenuAccordion/MenuAccordion.css */
+.menu-accordion {
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.accordion-header {
+  width: 100%;
+  padding: var(--spacing-lg);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--gray-800);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+.accordion-header:hover {
+  background-color: var(--gray-50);
+}
+
+.accordion-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.accordion-icon {
+  font-size: var(--font-size-lg);
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accordion-arrow {
+  font-size: var(--font-size-xs);
+  color: var(--gray-500);
+  transition: transform 0.2s;
+}
+
+.accordion-arrow.open {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  background-color: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+}
