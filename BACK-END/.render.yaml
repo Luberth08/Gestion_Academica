@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: ficct-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:3DXojr/GKaOZdMGMXXGR5ibeNqkuJBxmOArxT6p8ysY=
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        value: dpg-d40n1rndiees73d9uqqg-a.oregon-postgres.render.com
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        value: gestion_academica_db_d0rb
+      - key: DB_USERNAME
+        value: gestion_academica_user
+      - key: DB_PASSWORD
+        value: c5b9GfMTxcZOdSdI8dIZW25XClWATFgy
+      - key: JWT_SECRET
+        value: secreto123
