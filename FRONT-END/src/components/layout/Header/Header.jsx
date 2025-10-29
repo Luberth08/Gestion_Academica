@@ -9,11 +9,14 @@ const Header = () => {
 
   const handleProfile = () => {
     console.log('Ir al perfil');
-    // navigateTo('/perfil');
   };
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleSettings = () => {
+    console.log('Ir a configuraciones');
   };
 
   const getDisplayName = () => {
@@ -24,15 +27,35 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-left">
-        <h1 className="header-title">Sistema Académico</h1>
+        <div className="header-brand">
+          <div className="brand-icon">🎓</div>
+          <div>
+            <h1 className="header-title">AcademicPro</h1>
+            <p className="header-subtitle">Sistema de Gestión Académica</p>
+          </div>
+        </div>
       </div>
       
       <div className="header-right">
+        <div className="header-actions">
+          <button className="action-btn" title="Notificaciones">
+            <span className="action-icon">🔔</span>
+            <span className="notification-badge">3</span>
+          </button>
+          
+          <button className="action-btn" title="Configuración">
+            <span className="action-icon">⚙️</span>
+          </button>
+        </div>
+        
         <Dropdown
           trigger={
             <div className="user-menu-trigger">
-              <Avatar size="sm" />
-              <span className="user-name">{getDisplayName()}</span>
+              <Avatar size="md" />
+              <div className="user-info">
+                <span className="user-name">{getDisplayName()}</span>
+                <span className="user-role">Administrador</span>
+              </div>
               <span className="dropdown-arrow">▼</span>
             </div>
           }
@@ -42,7 +65,12 @@ const Header = () => {
             <span className="dropdown-icon">👤</span>
             Mi Perfil
           </Dropdown.Item>
-          <Dropdown.Item onClick={handleLogout}>
+          <Dropdown.Item onClick={handleSettings}>
+            <span className="dropdown-icon">⚙️</span>
+            Configuración
+          </Dropdown.Item>
+          <div className="dropdown-divider"></div>
+          <Dropdown.Item onClick={handleLogout} className="logout-item">
             <span className="dropdown-icon">🚪</span>
             Cerrar Sesión
           </Dropdown.Item>

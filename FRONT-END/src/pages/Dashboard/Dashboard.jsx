@@ -11,8 +11,11 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="loading-screen">
-        <div className="loading-spinner"></div>
-        <p>Cargando...</p>
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <h2>Cargando Sistema Académico</h2>
+          <p>Estamos preparando todo para ti...</p>
+        </div>
       </div>
     );
   }
@@ -24,8 +27,8 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <Header />
       <Sidebar />
+      <Header />
       <MainContent />
     </div>
   );
