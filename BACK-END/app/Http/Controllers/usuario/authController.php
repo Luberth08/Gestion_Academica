@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use App\Services\bitacoraService;
+use App\Services\BitacoraService;
 
 class authController extends Controller
 {
