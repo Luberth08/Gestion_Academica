@@ -11,10 +11,13 @@ export default function QRRegistroPage() {
   const [claseInfo, setClaseInfo] = useState(null);
   const navigate = useNavigate();
 
+  // En QRRegistroPage.jsx - Agregar más logging y manejo de errores
   useEffect(() => {
     const processQRPayload = async () => {
       const searchParams = new URLSearchParams(window.location.search);
       const payloadBase64 = searchParams.get('payload');
+
+      console.log('🔍 QR Payload recibido:', payloadBase64); // DEBUG
 
       if (!payloadBase64) {
         setStatus({ 
@@ -26,9 +29,24 @@ export default function QRRegistroPage() {
       }
 
       try {
-        // Decodificar payload
-        const payload = JSON.parse(atob(payloadBase64));
+        // Decodificar payload con mejor manejo de errores
+        let payload;
+        try {
+          const decodedString = atob(payloadBase64);
+          console.log('📝 Payload decodificado:', decodedString); // DEBUG
+          payload = JSON.parse(decodedString);
+        } catch (decodeError) {
+          console.error('Error decodificando payload:', decodeError);
+          setStatus({ 
+            type: 'error', 
+            message: '❌ QR corrupto',
+            details: 'El código QR no tiene un formato válido.'
+          });
+          return;
+        }
+
         setClaseInfo(payload);
+        console.log('📋 Información de clase:', payload); // DEBUG
 
         // Validar expiración
         if (payload.expira && Date.now() > payload.expira) {
@@ -41,11 +59,14 @@ export default function QRRegistroPage() {
         }
 
         // Validar campos requeridos
-        if (!payload.id_gestion || !payload.nro_aula || !payload.id_horario) {
+        const requiredFields = ['id_gestion', 'nro_aula', 'id_horario'];
+        const missingFields = requiredFields.filter(field => !payload[field]);
+        
+        if (missingFields.length > 0) {
           setStatus({ 
             type: 'error', 
             message: '❌ Datos incompletos',
-            details: 'Faltan datos necesarios para registrar la asistencia.'
+            details: `Faltan campos requeridos: ${missingFields.join(', ')}`
           });
           return;
         }
@@ -55,8 +76,11 @@ export default function QRRegistroPage() {
           message: `📚 Registrando asistencia para ${payload.sigla_materia || 'la clase'}...` 
         });
 
+        console.log('🚀 Enviando registro a API...'); // DEBUG
+        
         // Registrar asistencia
         const result = await asistenciaAPI.registrarAsistencia(payload);
+        console.log('✅ Respuesta de API:', result); // DEBUG
 
         if (result.success) {
           setStatus({ 
@@ -74,16 +98,16 @@ export default function QRRegistroPage() {
         }
 
       } catch (err) {
-        console.error('Error en registro de asistencia:', err);
+        console.error('❌ Error completo en registro:', err); // DEBUG
         
         let errorMessage = '❌ Error al registrar asistencia';
         let errorDetails = err.message || 'Ocurrió un error inesperado';
 
         // Manejar errores específicos
-        if (err.message.includes('Ya existe')) {
+        if (err.message.includes('Ya existe') || err.message.includes('duplicad')) {
           errorMessage = '✅ Asistencia ya registrada';
           errorDetails = 'Ya habías registrado tu asistencia para esta clase.';
-        } else if (err.message.includes('expirado')) {
+        } else if (err.message.includes('expirado') || err.message.includes('expirad')) {
           errorMessage = '❌ Código QR expirado';
           errorDetails = 'Este código QR ya no es válido.';
         } else if (err.message.includes('horario')) {
