@@ -2,8 +2,8 @@
 
 // Importaciones necesarias
 use Illuminate\Support\Facades\Route;
-use app\Http\Controllers\usuario\DocenteController;
-use app\Http\Middleware\verificarToken;
+use App\Http\Controllers\usuario\DocenteController;
+use App\Http\Middleware\verificarToken;
 
 // Docente - Crear docente desde cero
 Route::post('/docente/storeFromScratch', [DocenteController::class, 'storeFromScratch'])

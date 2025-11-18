@@ -2,8 +2,8 @@
 
 // Importaciones necesarias
 use Illuminate\Support\Facades\Route;
-use app\Http\Controllers\usuario\RolController;
-use app\Http\Middleware\verificarToken;
+use App\Http\Controllers\usuario\RolController;
+use App\Http\Middleware\verificarToken;
 
 // Obtener todos los roles
 Route::get('/rol', [RolController::class, 'index'])

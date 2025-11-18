@@ -124,10 +124,10 @@ Route::get('/debug-rol', function() {
 Route::get('/debug-rol-controller', function() {
     try {
         // Verificar si el controlador existe
-        $controllerExists = class_exists('app\Http\Controllers\usuario\RolController');
+        $controllerExists = class_exists('App\Http\Controllers\usuario\RolController');
         
         // Verificar si BitacoraService existe
-        $serviceExists = class_exists('app\Services\BitacoraService');
+        $serviceExists = class_exists('App\Services\BitacoraService');
         
         // Verificar si la tabla rol existe
         $tableExists = DB::select("
@@ -203,4 +203,43 @@ Route::get('/debug-tabla-rol', function() {
             'table_exists' => false
         ], 500);
     }
+});
+
+Route::get('/debug-files-structure', function() {
+    $structure = [];
+    
+    // Verificar estructura de controladores
+    try {
+        $controllerFiles = scandir(app_path('Http/Controllers'));
+        $usuarioControllerFiles = scandir(app_path('Http/Controllers/usuario'));
+        
+        $structure['controllers_root'] = $controllerFiles;
+        $structure['controllers_usuario'] = $usuarioControllerFiles;
+    } catch (Exception $e) {
+        $structure['controllers_error'] = $e->getMessage();
+    }
+    
+    // Verificar estructura de servicios
+    try {
+        $serviceFiles = scandir(app_path('Services'));
+        $structure['services'] = $serviceFiles;
+    } catch (Exception $e) {
+        $structure['services_error'] = $e->getMessage();
+    }
+    
+    // Verificar archivos específicos
+    $specificFiles = [
+        'RolController.php' => file_exists(app_path('Http/Controllers/usuario/RolController.php')),
+        'BitacoraService.php' => file_exists(app_path('Services/BitacoraService.php')),
+    ];
+    
+    $structure['specific_files'] = $specificFiles;
+    
+    // Verificar con class_exists
+    $structure['class_exists'] = [
+        'RolController' => class_exists('App\Http\Controllers\usuario\RolController'),
+        'BitacoraService' => class_exists('App\Services\BitacoraService'),
+    ];
+    
+    return response()->json($structure);
 });
