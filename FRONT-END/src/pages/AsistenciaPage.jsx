@@ -99,9 +99,10 @@ export default function AsistenciaPage() {
 
     const payloadBase64 = btoa(JSON.stringify(payload));
     
+    // CAMBIA ESTA LÍNEA - usa la ruta correcta
     setModalQR({
       ...clase,
-      qrUrl: `${window.location.origin}/qr-registro?payload=${payloadBase64}`,
+      qrUrl: `${window.location.origin}/dashboard/asistencia/qr?payload=${payloadBase64}`,
       qrExpira: new Date(payload.expira)
     });
   };
