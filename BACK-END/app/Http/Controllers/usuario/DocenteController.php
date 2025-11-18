@@ -28,7 +28,7 @@ class DocenteController extends Controller
             // Usuario
             'username' => 'required|string|max:50|regex:/^[A-Za-z0-9_\-]+$/|unique:usuario,username',
             'email' => 'required|string|email|max:320|unique:usuario,email',
-            'contrasena' => 'required|string|min:8|max:250',
+            'contrasena' => 'required|string|max:250',
             'id_rol' => 'nullable|integer|exists:rol,id',
             // Docente
             'codigo' => 'required|string|max:20|unique:docente,codigo'

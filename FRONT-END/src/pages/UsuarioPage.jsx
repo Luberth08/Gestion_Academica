@@ -34,11 +34,13 @@ export default function UsuarioPage() {
   const [showAddDocenteFromScratchModal, setShowAddDocenteFromScratchModal] = useState(false);
   const [showRemoveDocenteModal, setShowRemoveDocenteModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showImportSuccessModal, setShowImportSuccessModal] = useState(false); // Nuevo estado para modal de éxito
 
   const [modalError, setModalError] = useState('');
   const [loadingModal, setLoadingModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [docenteInfo, setDocenteInfo] = useState(null);
+  const [importResult, setImportResult] = useState(null); // Nuevo estado para resultados de importación
 
   const [usuarioForm, setUsuarioForm] = useState({
     ci: '', nombre: '', apellido_p: '', apellido_m: '',
@@ -260,7 +262,6 @@ export default function UsuarioPage() {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          // NO incluir 'Content-Type' - Deja que el navegador lo establezca automáticamente con el boundary
         },
         body: formData,
       });
@@ -290,8 +291,13 @@ export default function UsuarioPage() {
       setShowImportModal(false);
       fetchUsuarios();
       
-      // Mostrar mensaje de éxito
-      alert(`¡Importación exitosa! Se importaron ${data.total_importados} usuarios correctamente.`);
+      // 🔥 REEMPLAZADO: Mostrar modal de éxito en lugar de alert feo
+      setImportResult({
+        total_importados: data.total_importados,
+        errores: data.errores || [],
+        mensaje: data.message || 'Importación completada'
+      });
+      setShowImportSuccessModal(true);
       
     } catch (err) {
       console.error('Error en importación:', err);
@@ -450,6 +456,14 @@ export default function UsuarioPage() {
         />
       )}
 
+      {/* -------- Modal de Éxito en Importación -------- */}
+      {showImportSuccessModal && (
+        <ImportSuccessModal 
+          result={importResult}
+          onClose={() => setShowImportSuccessModal(false)}
+        />
+      )}
+
       {/* -------- Añadir Docente -------- */}
       {showAddDocenteModal && (
         <AddDocenteModal
@@ -473,6 +487,75 @@ export default function UsuarioPage() {
           roles={roles}
         />
       )}
+    </div>
+  );
+}
+
+// --------------------- Modal de Éxito en Importación ---------------------
+function ImportSuccessModal({ result, onClose }) {
+  if (!result) return null;
+
+  return (
+    <div className="modal-backdrop">
+      <div className="modal-card" style={{ maxWidth: 500 }}>
+        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+          <div style={{ fontSize: '48px', color: '#28a745', marginBottom: '15px' }}>✅</div>
+          <h3 style={{ color: '#28a745', marginBottom: '10px' }}>¡Importación Exitosa!</h3>
+          <p style={{ fontSize: '18px', marginBottom: '20px' }}>
+            Se importaron <strong>{result.total_importados}</strong> usuarios correctamente.
+          </p>
+        </div>
+
+        {/* Mostrar errores si existen */}
+        {result.errores && result.errores.length > 0 && (
+          <div style={{ 
+            backgroundColor: '#fff3cd', 
+            border: '1px solid #ffeaa7',
+            borderRadius: '4px',
+            padding: '15px',
+            marginBottom: '15px'
+          }}>
+            <h4 style={{ color: '#856404', margin: '0 0 10px 0' }}>⚠️ Advertencias:</h4>
+            <div style={{ maxHeight: '150px', overflowY: 'auto', fontSize: '14px' }}>
+              {result.errores.map((error, index) => (
+                <div key={index} style={{ 
+                  padding: '5px 0', 
+                  borderBottom: index < result.errores.length - 1 ? '1px solid #ffeaa7' : 'none' 
+                }}>
+                  <strong>Fila {error.fila}:</strong> {error.mensaje}
+                  {error.detalles && (
+                    <div style={{ color: '#666', fontSize: '12px', marginLeft: '10px' }}>
+                      {error.detalles}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div style={{ 
+          backgroundColor: '#e8f4fd', 
+          border: '1px solid #b8daff',
+          borderRadius: '4px',
+          padding: '12px',
+          textAlign: 'center'
+        }}>
+          <p style={{ margin: 0, color: '#004085', fontSize: '14px' }}>
+            Los usuarios han sido agregados al sistema correctamente.
+          </p>
+        </div>
+
+        <div className="modal-buttons" style={{ justifyContent: 'center', marginTop: '20px' }}>
+          <button 
+            className="btn-confirm" 
+            onClick={onClose}
+            style={{ padding: '10px 30px' }}
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
