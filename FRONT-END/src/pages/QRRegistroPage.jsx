@@ -79,24 +79,24 @@ export default function QRRegistroPage() {
         console.log('🚀 Enviando registro a API...'); // DEBUG
         
         // Registrar asistencia
-        const result = await asistenciaAPI.registrarAsistencia(payload);
+        const result = await asistenciaAPI.registrarQR(payload);
         console.log('✅ Respuesta de API:', result); // DEBUG
 
-        if (result.success) {
-          setStatus({ 
-            type: 'success', 
-            message: '✅ ¡Asistencia registrada correctamente!',
-            details: `Has registrado tu asistencia para ${payload.sigla_materia || 'la clase'}.`
-          });
+      // Por esto:
+      if (result.message) {
+        setStatus({ 
+          type: 'success', 
+          message: '✅ ¡Asistencia registrada correctamente!',
+          details: result.message
+        });
 
-          // Redirigir automáticamente después de 3 segundos
-          setTimeout(() => {
-            navigate('/asistencia', { replace: true });
-          }, 3000);
-        } else {
-          throw new Error(result.message || 'Error al registrar asistencia');
-        }
-
+        // Redirigir automáticamente después de 3 segundos
+        setTimeout(() => {
+          navigate('/dashboard/asistencia/registrar', { replace: true });
+        }, 3000);
+      } else {
+        throw new Error(result.message || 'Error al registrar asistencia');
+      }
       } catch (err) {
         console.error('❌ Error completo en registro:', err); // DEBUG
         
