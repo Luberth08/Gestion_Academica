@@ -26,5 +26,5 @@ Route::post('/asignar-aula', [AsignarAulaController::class, 'store'])
     ->middleware(['verificarToken', 'verificarPermiso:CREAR_ASIGNACION_AULA']);
 
 // Eliminar asignación (por día y hora)
-Route::delete('/asignar-aula/{id_gestion}/{nro_aula}', [AsignarAulaController::class, 'destroy'])
+Route::delete('/asignar-aula/{id_gestion}/{nro_aula}/{dia}/{hora_inicio}/{hora_fin}', [AsignarAulaController::class, 'destroy'])
     ->middleware(['verificarToken', 'verificarPermiso:ELIMINAR_ASIGNACION_AULA']);

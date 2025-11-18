@@ -217,27 +217,14 @@ class AsignarAulaController extends Controller
     // -------------------------------------------------
     // Eliminar asociación (por día, hora y aula)
     // -------------------------------------------------
-    public function destroy($id_gestion, $nro_aula, Request $request)
+    public function destroy($id_gestion, $nro_aula, $dia, $hora_inicio, $hora_fin, Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'dia' => 'required|string|max:10',
-            'hora_inicio' => 'required|date_format:H:i',
-            'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
             // Buscar el horario con los parámetros recibidos
             $horario = DB::table('horario')
-                ->where('dia', $request->dia)
-                ->where('hora_inicio', $request->hora_inicio)
-                ->where('hora_fin', $request->hora_fin)
+                ->where('dia', urldecode($dia))
+                ->where('hora_inicio', $hora_inicio)
+                ->where('hora_fin', $hora_fin)
                 ->first();
 
             if (!$horario) {
@@ -266,7 +253,7 @@ class AsignarAulaController extends Controller
                     $bitacoraId,
                     'DELETE',
                     "/asignar-aula/{$id_gestion}/{$nro_aula}",
-                    "Se eliminó la asociación del aula {$nro_aula} en gestión {$id_gestion}, horario {$request->dia} {$request->hora_inicio}-{$request->hora_fin}"
+                    "Se eliminó la asociación del aula {$nro_aula} en gestión {$id_gestion}, horario {$dia} {$hora_inicio}-{$hora_fin}"
                 );
             }
 
