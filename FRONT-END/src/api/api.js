@@ -384,11 +384,17 @@ export const asignarAulaAPI = {
     }),
 
   // Eliminar asociación aula-horario
-  remove: (id_gestion, nro_aula, data) => 
-    apiRequest(`api/asignar-aula/${id_gestion}/${nro_aula}`, {
+  remove: (id_gestion, nro_aula, data) => {
+    const { dia, hora_inicio, hora_fin } = data;
+    
+    // Codificar el día para la URL (por si tiene espacios)
+    const diaCodificado = encodeURIComponent(dia.trim());
+    
+    return apiRequest(`api/asignar-aula/${id_gestion}/${nro_aula}/${diaCodificado}/${hora_inicio}/${hora_fin}`, {
       method: 'DELETE',
-      body: data,
-    }),
+      // NO enviar body - todos los parámetros van en la URL
+    });
+  },
 };
 
 // ----------------------------
