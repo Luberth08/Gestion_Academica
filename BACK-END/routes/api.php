@@ -1,8 +1,5 @@
 <?php
 
-
-use app\Http\Controllers\usuario\RolController;
-
 // Administrar Usuario
 require __DIR__ . '/usuario/auth.routes.php';
 require __DIR__ . '/usuario/docente.routes.php';
