@@ -21,6 +21,20 @@ require __DIR__ . '/academico/asignar_aula.routes.php';
 // Administrar Asistencia
 require __DIR__ . '/asistencia/asistencia.routes.php';
 
+Route::get('/debug-namespace-case', function() {
+    $tests = [
+        // Con App (mayúscula) - DEBERÍA funcionar
+        'App\Http\Controllers\usuario\authController' => class_exists('App\Http\Controllers\usuario\authController'),
+        'App\Services\BitacoraService' => class_exists('App\Services\BitacoraService'),
+        
+        // Con app (minúscula) - NO debería funcionar
+        'app\Http\Controllers\usuario\authController' => class_exists('app\Http\Controllers\usuario\authController'),
+        'app\Services\BitacoraService' => class_exists('app\Services\BitacoraService'),
+    ];
+    
+    return response()->json($tests);
+});
+
 // Administrar Reporte
 Route::get('/test', function() {
     $config = [
