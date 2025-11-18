@@ -7,13 +7,9 @@ import '../styles/Dashboard.css';
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleLogout = () => {
-    // optional callback hook
-  };
-
   return (
     <div className="dashboard-root">
-      <Header onLogout={handleLogout} />
+      <Header/>
       <div className="dashboard-body">
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((s) => !s)} />
         <main className="dashboard-content">
